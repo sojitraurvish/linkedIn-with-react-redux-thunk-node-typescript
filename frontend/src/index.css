@@ -1,0 +1,51 @@
+html{
+  scroll-behavior: smooth;
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background-color: white;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-family: Arial, sans-serif;
+}
+
+/* For Mobile devices: 320px-480px */
+@media only screen and (min-width:320px) and (max-width:480px) {
+  body{
+      font-size: 14px;
+  }
+}
+
+/* For Tablets or iPad: 480px - 768px */
+@media only screen and (min-width:481px ) and (max-width: 768px){
+  body{
+      font-size: 16px;
+  }
+}
+
+/* For Laptop or small-size screen: 768px -1024px */
+@media only screen and (min-width:769px ) and (max-width:1024px){
+  body{
+      font-size: 18px;
+  }
+}
+
+/* For Desktop or large-size screen: 1024px -1200px */
+@media only screen and (min-width:1025px) and (max-width:1200px){
+  body{
+      font-size: 20px;
+  }
+}
+
+/* For Extra-large size device: 1200px and more */
+@media only screen and (min-width:1201px){
+  body{
+      font-size: 22px;
+  }
+}
