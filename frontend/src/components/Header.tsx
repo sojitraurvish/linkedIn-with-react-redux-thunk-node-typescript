@@ -245,6 +245,18 @@ const SignOut=styled.div`
     hr{
         border-bottom:1px solid black;
     }
+
+    @media (max-width:768px) {
+        top:-60px;
+        border:1px solid #a7a5a5;
+        border-radius:9px;
+        border-bottom-right-radius: 0;
+        &:hover{
+            border:1px solid #a7a5a5;
+            border-radius:9px;
+            border-bottom-right-radius: 0;
+        }
+    }
 `
 const User=styled(Li)`
     position:relative;
