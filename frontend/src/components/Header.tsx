@@ -49,7 +49,7 @@ const Header=()=>{
                         
                         <User>
                             <a>
-                                <img src="/images/user.svg" alt="" />
+                                <img src="https://media.licdn.com/dms/image/C4D03AQHz9Q64Cgh1Vw/profile-displayphoto-shrink_800_800/0/1659764785920?e=1678320000&v=beta&t=65sN8n89N80Iw8JIe-RXCNxp-9k5wSCi80RXLifY7wI" alt="" />
                                 <div>
                                     <span>Me</span>
                                     <img src="/images/down-icon.svg" alt="" />

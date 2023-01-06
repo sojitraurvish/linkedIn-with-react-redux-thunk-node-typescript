@@ -97,6 +97,7 @@ const Section=styled.section`
 const Text=styled.div`
     /* border:2px solid red; */
     padding: 0 20px;
+    position: relative;
     width: 100%;
     h1{
         width: 55%;
@@ -115,12 +116,11 @@ const Text=styled.div`
     }
 
     img{
-        
         width: 800px;
         height: 870px;
         position: absolute;
         bottom: 20%;
-        right: -5%;
+        right: -25%;
         top:100px;
         @media (max-width:768px){
             width:100%;

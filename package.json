@@ -1,0 +1,28 @@
+{
+  "name": "linkin",
+  "version": "1.0.0",
+  "description": "linked in clone",
+  "main": "\\",
+  "scripts": {
+    "install-server": "npm install --prefix backend",
+    "install-client": "npm install --prefix frontend",
+    "install": "npm run install-server && npm run install-client",
+    "server": "npm run server --prefix backend",
+    "client": "npm start --prefix frontend",
+    "watch": "concurrently \"npm run server\"  \"npm run client\" ",
+    "deploy": "npm run build --prefix client && npm start --prefix server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sojitraurvish/linkedIn-with-react-redux-thunk-node-typescript.git"
+  },
+  "author": "urvish sojitar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sojitraurvish/linkedIn-with-react-redux-thunk-node-typescript/issues"
+  },
+  "homepage": "https://github.com/sojitraurvish/linkedIn-with-react-redux-thunk-node-typescript#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
