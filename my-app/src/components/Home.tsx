@@ -2,7 +2,13 @@ import styled from "styled-components"
 import Leftside from "./Leftside"
 import Main from "./Main"
 import Rightside from "./Rightside"
+import { useSelector } from "react-redux"
+import { selectUserLogin } from "../store/selectors/userSelectors"
+
 const Home=()=>{
+
+    const {userInfo,loading,error}=useSelector(selectUserLogin)
+
     return (
         <Container>
             <Content>
@@ -16,7 +22,7 @@ const Home=()=>{
                     </p>
                 </Section>
                 <MainContent>
-                    <Leftside/>
+                    <Leftside myUserInfo={userInfo!}/>
                     <Main/>
                     <Rightside/>
                 </MainContent>

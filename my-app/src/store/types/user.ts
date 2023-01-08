@@ -1,5 +1,5 @@
 export interface UserData{
-    photoUrl:string,
+    photoURL:string,
     displayName:string
 }
 

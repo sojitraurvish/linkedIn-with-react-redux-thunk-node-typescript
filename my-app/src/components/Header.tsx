@@ -1,6 +1,27 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
+import { logout } from "../store/actions/userActions";
+import { selectUserLogin } from "../store/selectors/userSelectors";
+import { AppDispatch } from "../store/store"
 
 const Header=()=>{
+    const dispatch=useDispatch<AppDispatch>();
+    const navigate=useNavigate();
+
+    const {userInfo,loading,error}=useSelector(selectUserLogin)
+
+    useEffect(()=>{
+        if(!userInfo){
+            navigate("/")            
+        }
+    })
+
+    const onSubmit=()=>{
+        dispatch(logout())
+    }
+
     return (
         <Container>
             <Content>
@@ -49,14 +70,14 @@ const Header=()=>{
                         
                         <User>
                             <a>
-                                <img src="https://media.licdn.com/dms/image/C4D03AQHz9Q64Cgh1Vw/profile-displayphoto-shrink_800_800/0/1659764785920?e=1678320000&v=beta&t=65sN8n89N80Iw8JIe-RXCNxp-9k5wSCi80RXLifY7wI" alt="" />
+                                <img src={userInfo?.user.photoURL} alt="" />
                                 <div>
                                     <span>Me</span>
                                     <img src="/images/down-icon.svg" alt="" />
                                 </div>
                             </a>
 
-                            <SignOut>
+                            <SignOut onClick={onSubmit}>
                                 <a>SignOut</a>
                                 {/* <hr/> */}
                             </SignOut>

@@ -1,12 +1,29 @@
+import { useState,ChangeEvent,MouseEvent } from "react";
 import styled from "styled-components";
+import PostModel from "./PostModel";
+
+
 
 const Main=()=>{
+
+    const [postModel,setPostModel]=useState(false);
+
+    const handleClick=(e: MouseEvent<HTMLButtonElement>)=>{
+        e.preventDefault();
+        // if(e.target !== e.currentTarget){
+        //     console.log("error");
+        //     return;
+        // }
+        
+        setPostModel(!postModel);
+    }
+
     return (
         <Container>
             <ShareBox>
                 <div>
                     <img src="https://media.licdn.com/dms/image/C4D03AQHz9Q64Cgh1Vw/profile-displayphoto-shrink_800_800/0/1659764785920?e=1678320000&v=beta&t=65sN8n89N80Iw8JIe-RXCNxp-9k5wSCi80RXLifY7wI" alt="" />
-                    <button>Start a post</button>
+                    <button onClick={handleClick}>Start a post</button>
                 </div>
 
                 <div>
@@ -87,6 +104,7 @@ const Main=()=>{
                 </Article>
                 
             </div>
+            <PostModel showModel={postModel} handleClick={handleClick}/>
         </Container>
     );
 }

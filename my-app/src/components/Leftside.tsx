@@ -1,6 +1,12 @@
+import { FC } from "react";
 import styled from "styled-components";
+import { User } from "../store/types";
 
-const Leftside=()=>{
+export type LiftsideProps={
+    myUserInfo:User
+}
+
+const Leftside:FC<LiftsideProps>=({myUserInfo})=>{
     return (
         <Container>
             <FirstCard>
@@ -14,7 +20,7 @@ const Leftside=()=>{
 
                     <a href="">
                         <Photo imageUrl="https://media.licdn.com/dms/image/C4D03AQHz9Q64Cgh1Vw/profile-displayphoto-shrink_800_800/0/1659764785920?e=1678320000&v=beta&t=65sN8n89N80Iw8JIe-RXCNxp-9k5wSCi80RXLifY7wI"/>
-                        <MyLink>Welcome, Urvish Sojitra</MyLink>
+                        <MyLink>Welcome, {myUserInfo?.user.displayName ?? "there"}</MyLink>
                     </a>
 
                     <a href="">Add a photo</a>

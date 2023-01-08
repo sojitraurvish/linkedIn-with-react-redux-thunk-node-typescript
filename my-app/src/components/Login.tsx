@@ -1,6 +1,26 @@
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import { login } from "../store/actions/userActions"
+import { selectUserLogin } from "../store/selectors/userSelectors"
+import { AppDispatch } from "../store/store"
 
 const Login=()=>{
+    const dispatch=useDispatch<AppDispatch>();
+    const navigate=useNavigate();
+
+    const {loading,error,userInfo}=useSelector(selectUserLogin);
+
+    useEffect(()=>{
+        if(userInfo){
+            navigate("/home");
+        }
+    })
+
+    const submitHandler=()=>{
+        dispatch(login())
+    }
 
     return (
 
@@ -23,7 +43,7 @@ const Login=()=>{
                 <img src="/images/login-hero.svg" alt="not_found" />
             </Text>
             <Form>
-                <GoogleBtn>
+                <GoogleBtn onClick={submitHandler}>
                     <img src="/images/google.svg" alt="not_found" />
                     Sign in with Google
                 </GoogleBtn>
