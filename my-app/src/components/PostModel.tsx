@@ -1,5 +1,15 @@
 import styled from "styled-components"
-import {useState,MouseEvent, ChangeEventHandler, ChangeEvent} from "react"
+import {useState,MouseEvent, ChangeEventHandler, ChangeEvent, useEffect} from "react"
+import ReactPlayer from "react-player"
+import { useDispatch, useSelector } from "react-redux"
+import { selectUserLogin } from "../store/selectors/userSelectors"
+import axios from "axios"
+import { AppDispatch, RootState } from "../store/store"
+import { createPost } from "../store/actions/postActions"
+import { selectPostCreate } from "../store/selectors/postSelector"
+import { createAction } from "../utils/reducer.utils"
+import { POST_CREATE_ACTION_TYPE } from "../store/types/postCreate"
+import { useNavigate } from "react-router-dom"
 
 export type PostModelProps={
     showModel:boolean,
@@ -8,20 +18,96 @@ export type PostModelProps={
 
 const PostModel=({showModel,handleClick}:PostModelProps)=>{
 
-    const [postText,setPostText]=useState("");
-    const [shareImage,setShareImage]=useState("");
+    const dispatch=useDispatch<AppDispatch>();
+    const navigate=useNavigate();
 
-    const handleChange=(e:ChangeEvent<HTMLInputElement>):void=>{
-        
-        
-        const image=e.target.files![0];
+    const {userInfo,error,loading}=useSelector(selectUserLogin)
+    const {post,success,error:postError,loading:postLoading}=useSelector((stete:RootState)=>stete.postCreate)
 
-        console.log(image);
+    const [postText,setPostText]=useState<string>("");
+    const [shareImage,setShareImage]=useState<string>("");
+    const [videoLink,setVideoLink]=useState<string>("");
+    const [assetArea,setAssetArea]=useState<string>("")
+    const [uploading,setUploading]=useState<boolean>(false);
+
+    useEffect(()=>{
+        if(success){
+            dispatch(
+                createAction(
+                    POST_CREATE_ACTION_TYPE.POST_CREATE_RESET
+                )
+            )
+            
+            
+            navigate("/home");
+        }
+    })
+
+    const handleChange=async(e:ChangeEvent<HTMLInputElement>):Promise<void>=>{
         
+        
+        const image = e.target.files![0];
+
+        if (!image) return;
+
+        const formData=new FormData();
+        formData.append("image",image);
+        setUploading(true)
+
+        try {
+            const config = {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            };
+      
+            const { data } = await axios.post("/api/upload", formData, config);
+      
+            console.log(data);
+            
+            setShareImage(data);
+
+            setUploading(false);
+          } catch (error) {
+            console.error(error);
+            setUploading(false);
+          }
+        
+        
+    }
+
+    const switchAssetArea=(area:string)=>{
+        setShareImage("");
+        setVideoLink("");
+        setAssetArea(area)
     }
 
     const reset=(e:MouseEvent<HTMLButtonElement>)=>{
         setPostText("");
+        setShareImage("");
+        setVideoLink("");
+        setAssetArea("");
+        handleClick(e);
+    }
+
+    const submitForm=(e:MouseEvent<HTMLButtonElement>)=>{
+        e.preventDefault();
+    
+
+        dispatch(
+            createPost({
+                actor:{
+                    description:userInfo!.user.displayName,
+                    title:userInfo!.user.displayName,
+                    image:userInfo!.user.photoURL
+                },
+                video:videoLink,
+                sharedImg:shareImage,
+                comment:0,
+                description:postText
+            })
+        )
+        reset(e);
         handleClick(e);
     }
 
@@ -40,8 +126,8 @@ const PostModel=({showModel,handleClick}:PostModelProps)=>{
 
                     <SharedContent>
                         <UserInfo>
-                            <img src="/images/user.svg" alt="" />
-                            <span>Name</span>
+                            <img src={userInfo?.user.photoURL} alt="" />
+                            <span>{userInfo?.user.displayName}</span>
                         </UserInfo>
 
                             <Editor>
@@ -52,21 +138,45 @@ const PostModel=({showModel,handleClick}:PostModelProps)=>{
                                 placeholder="What do you want to talk about?"
                                 >
                                 </textarea>
-                                <UploadImage>
-                                    <input 
-                                    type="file" 
-                                    accept="image/gif,image/jpeg,image/png"
-                                    name="image"
-                                    id="file"
-                                    style={{display:"none"}}
-                                    onChange={(e)=>handleChange(e)}
-                                    />
-                                    <p>
-                                        <label htmlFor="file">
-                                            select an image to share
-                                        </label>
-                                    </p>
-                                </UploadImage>
+                                {
+                                    assetArea === "image" &&
+                                    <UploadImage>
+                                        <input 
+                                        type="file" 
+                                        accept="image/gif,image/jpeg,image/png"
+                                        name="image"
+                                        id="file"
+                                        style={{display:"none"}}
+                                        onChange={(e)=>handleChange(e)}
+                                        />
+                                        <p>
+                                            <label htmlFor="file">
+                                                select an image to share
+                                            </label>
+                                        </p>
+                                        {shareImage && 
+                                            <img src={shareImage}/>
+                                        }
+                                    </UploadImage>
+                                }
+                                {
+                                    assetArea === "video" &&
+                                    <>
+                                        <input 
+                                        type="text"
+                                        placeholder="Please input a video link"
+                                        value={videoLink}
+                                        onChange={(e)=>setVideoLink(e.target.value)}
+                                    
+                                        />
+                                        {
+                                            videoLink &&
+                                            <ReactPlayer width="100%" url={videoLink}/>
+                                        }
+                                    </>
+                                }
+                                    
+                                
                             </Editor>
                                 
                         
@@ -74,10 +184,10 @@ const PostModel=({showModel,handleClick}:PostModelProps)=>{
 
                     <ShareCreation>
                         <AttachAssets>
-                            <AssetsButton>
+                            <AssetsButton onClick={()=>switchAssetArea("image")}>
                                 <img src="/images/image.png" alt="" />
                             </AssetsButton>
-                            <AssetsButton>
+                            <AssetsButton onClick={()=>switchAssetArea("video")}>
                                 <img src="/images/video.png" alt="" />
                             </AssetsButton>
 
@@ -90,7 +200,7 @@ const PostModel=({showModel,handleClick}:PostModelProps)=>{
                             
                         </AttachAssets>
 
-                        <PostButton disabled={!postText ? true :false}>
+                        <PostButton onClick={(e)=>submitForm(e)} disabled={!postText ? true :false}>
                             Post
                         </PostButton>
 
@@ -250,9 +360,23 @@ const Editor=styled.div`
         min-height:150px;
         font-size: 20px;
         resize:none;
+        padding:5px;
+    }
+    input{
+        width: 100%;
+        min-height: 50px;
+        text-align: center;
+        font-size: 20px;
     }
     
 `
-const UploadImage=styled.div``
+const UploadImage=styled.div`
+    text-align: center;
+    img{
+        width:50%;
+        height:50%;
+    }
+    
+`
 
 export default PostModel

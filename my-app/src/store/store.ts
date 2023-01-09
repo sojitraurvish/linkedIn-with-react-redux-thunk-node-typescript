@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import {combineReducers} from "redux"
 import { userLoginReducer } from "./reducers/userReducers";
 import { ReduxState } from "./types/reduxState";
+import { postCreateReducer, postListReducer } from "./reducers/postReducers";
 
 
 export type AppDispatch=ThunkDispatch<ReduxState,unknown,Action<string>>
@@ -16,7 +17,9 @@ export type AppThunk=ThunkAction<
 >
 
 export const rootReducer=combineReducers({
-    userLogin:userLoginReducer
+    userLogin:userLoginReducer,
+    postCreate:postCreateReducer,
+    postList:postListReducer
 });
 
 export type RootState=ReturnType<typeof rootReducer>

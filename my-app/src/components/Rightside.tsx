@@ -47,9 +47,12 @@ const Rightside=()=>{
 }
 
 const Container=styled.div`
+
 `
 
 const FirstCard=styled.div`
+    position:sticky;
+    top:90px;
     background-color: white;
     border-radius: 5px;
     margin-bottom: 8px;

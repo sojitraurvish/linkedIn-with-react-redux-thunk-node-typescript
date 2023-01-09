@@ -1,12 +1,28 @@
-import { useState,ChangeEvent,MouseEvent } from "react";
+import { useState,useEffect,ChangeEvent,MouseEvent } from "react";
+import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { listPost } from "../store/actions/postActions";
+import { selectPostList } from "../store/selectors/postSelector";
+import { AppDispatch, RootState } from "../store/store";
 import PostModel from "./PostModel";
 
 
 
 const Main=()=>{
 
+    const dispatch=useDispatch<AppDispatch>();
     const [postModel,setPostModel]=useState(false);
+
+    const {post,error,loading}=useSelector((state:RootState)=>state.postList)
+    const {post:postCreate,success}=useSelector((state:RootState)=>state.postCreate)
+
+    console.log(post);
+    
+    useEffect(()=>{
+            dispatch(listPost());
+        
+    },[postCreate])
 
     const handleClick=(e: MouseEvent<HTMLButtonElement>)=>{
         e.preventDefault();
@@ -17,6 +33,8 @@ const Main=()=>{
         
         setPostModel(!postModel);
     }
+
+
 
     return (
         <Container>
@@ -48,60 +66,70 @@ const Main=()=>{
 
             </ShareBox>
             <div>
-                <Article>
-                    <SharedActor>
-                        <a href="">
-                            <img src="https://media.licdn.com/dms/image/C4D03AQHz9Q64Cgh1Vw/profile-displayphoto-shrink_800_800/0/1659764785920?e=1678320000&v=beta&t=65sN8n89N80Iw8JIe-RXCNxp-9k5wSCi80RXLifY7wI" alt="" />
-                            <div>
-                                <span>Title</span>
-                                <span>Info</span>
-                                <span>Date</span>
-                            </div>
-                        </a>
-                        <button>
-                            <img src="/images/elips.png" alt="" />
-                        </button>
-                    </SharedActor>
-                    <Description>
-                        description
-                    </Description>
-                    <SharedImg>
-                        <a href="">
-                            <img src="https://media.licdn.com/dms/image/C4D03AQHz9Q64Cgh1Vw/profile-displayphoto-shrink_800_800/0/1659764785920?e=1678320000&v=beta&t=65sN8n89N80Iw8JIe-RXCNxp-9k5wSCi80RXLifY7wI" alt="" />
-                        </a>
-                    </SharedImg>
-                    <SocialCounts>
-                        <li>
+                {
+                    post?.map((post)=>(
+                            <Article key={post._id}>
+                        <SharedActor>
+                            <a href="">
+                                <img src={post.actor.image} alt="" />
+                                <div>
+                                    <span>{post.actor.title}</span>
+                                    <span>{post.actor.description}</span>
+                                    <span>{post.actor.date}</span>
+                                </div>
+                            </a>
                             <button>
-                                <img src="/images/like-r.png" alt="" />
-                                <img src="/images/clap-r.png" alt="" />
-                                <span>Urvish sojitra & 75 others</span>
+                                <img src="/images/elips.png" alt="" />
                             </button>
-                        </li>
-                        <li>
-                            <a href="">2 Comments</a>
-                        </li>
-                    </SocialCounts>
-                    <LastSection>
-                        <button>
-                            <img src="/images/like.png" alt="" />
-                            <span>Like</span>
-                        </button>
-                        <button>
-                            <img src="/images/comment.png" alt="" />
-                            <span>Comments</span>
-                        </button>
-                        <button>
-                            <img src="/images/share.png" alt="" />
-                            <span>Share</span>
-                        </button>
-                        <button>
-                            <img src="/images/connect.png" alt="" />
-                            <span>Send</span>
-                        </button>
+                        </SharedActor>
+                        <Description>
+                            {post.description}
+                        </Description>
+                        <SharedImg>
+                            <a href="">
+                                {
+                                    post.sharedImg 
+                                    ? (<img src={post.sharedImg} alt="" />)
+                                    : (<ReactPlayer width="100%" url={post.video}/>)
 
-                    </LastSection>
-                </Article>
+                                }
+                            </a>
+                        </SharedImg>
+                        <SocialCounts>
+                            <li>
+                                <button>
+                                    <img src="/images/like-r.png" alt="" />
+                                    <img src="/images/clap-r.png" alt="" />
+                                    <span>Urvish sojitra & 75 others</span>
+                                </button>
+                            </li>
+                            <li>
+                                <a href="">{post.comment ?? "0"} </a>
+                            </li>
+                        </SocialCounts>
+                        <LastSection>
+                            <button>
+                                <img src="/images/like.png" alt="" />
+                                <span>Like</span>
+                            </button>
+                            <button>
+                                <img src="/images/comment.png" alt="" />
+                                <span>Comments</span>
+                            </button>
+                            <button>
+                                <img src="/images/share.png" alt="" />
+                                <span>Share</span>
+                            </button>
+                            <button>
+                                <img src="/images/connect.png" alt="" />
+                                <span>Send</span>
+                            </button>
+
+                        </LastSection>
+                    </Article>
+                    ))
+                }
+                
                 
             </div>
             <PostModel showModel={postModel} handleClick={handleClick}/>

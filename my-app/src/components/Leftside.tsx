@@ -68,9 +68,13 @@ const Leftside:FC<LiftsideProps>=({myUserInfo})=>{
     );
 }
 
-const Container=styled.div``
+const Container=styled.div`
+   
+`
 
 const FirstCard=styled.div`
+    position:sticky;
+    top:90px;
     text-align: center;
     background-color: #fff;
     border-radius: 5px;
@@ -78,7 +82,7 @@ const FirstCard=styled.div`
     border: none;
     overflow: hidden;
     box-shadow:0 0 0 1px rgb(0 0 0 /15%),0 0 0 rgb(0 0 0 /20%);
-    position: relative;
+    /* position: relative; */
     margin-bottom: 8px;
 
 `
@@ -185,7 +189,8 @@ const Item=styled.div`
 `
 
 const SecondCard=styled(FirstCard)`
-    
+position:sticky;
+    top:365px;
     /* justify-content: center; */
     a{
         color:black;
